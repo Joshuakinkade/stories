@@ -1,0 +1,250 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Flex Row Layout</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            /* ── Base ── */
+            body {
+                margin: 0;
+                font-family: sans-serif;
+            }
+
+            header,
+            main {
+                margin: auto;
+                max-width: 1024px;
+                padding: 0 1rem;
+            }
+
+            /* ── Rows ── */
+            .row {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 2rem;
+                align-items: flex-start;
+            }
+
+            /* ── Text blocks ── */
+            .text {
+                flex: 1;
+                min-width: 0; /* prevent overflow */
+                margin: 2rem 0;
+            }
+
+            .text-wide {
+                flex: 2;
+                min-width: 0;
+            }
+
+            .text-widest {
+                flex: 3;
+                min-width: 0;
+            }
+
+            .text p,
+            .text-wide p,
+            .text-widest p {
+                margin-top: 0;
+            }
+
+            /* ── Placeholder blocks ── */
+            .placeholder {
+                background-color: gray;
+                flex-shrink: 0;
+                margin: 2rem;
+            }
+
+            /* Each placeholder variant sets its own size/aspect-ratio */
+            .ph-square-sm {
+                flex: 1;
+                aspect-ratio: 1 / 1;
+                min-width: 80px;
+            }
+            .ph-landscape {
+                flex: 2;
+                aspect-ratio: 16 / 9;
+                min-width: 120px;
+            }
+            .ph-portrait {
+                width: 160px;
+                aspect-ratio: 3 / 4;
+            }
+            .ph-square-lg {
+                flex: 1;
+                aspect-ratio: 1 / 1;
+                min-width: 100px;
+            }
+            .ph-tall {
+                flex: 1;
+                aspect-ratio: 2 / 3;
+                min-width: 80px;
+            }
+            .ph-wide-short {
+                flex: 2;
+                aspect-ratio: 3 / 1;
+                min-width: 120px;
+            }
+
+            /* shade variants */
+            .ph-a {
+                background-color: #808080;
+            }
+            .ph-b {
+                background-color: #9e9e9e;
+            }
+            .ph-c {
+                background-color: #b0b0b0;
+            }
+            .ph-d {
+                background-color: #888888;
+            }
+            .ph-e {
+                background-color: #a0a0a0;
+            }
+            .ph-f {
+                background-color: #c0c0c0;
+            }
+            .ph-g {
+                background-color: #999999;
+            }
+
+            /* ── Responsive: stack on narrow screens ── */
+            @media (max-width: 600px) {
+                .row {
+                    flex-direction: column;
+                }
+
+                .text,
+                .text-wide,
+                .text-widest,
+                .placeholder {
+                    width: 100% !important;
+                    flex: none !important;
+                    align-self: auto !important;
+                }
+
+                /* Let placeholders fill the width and keep their ratio */
+                .ph-square-sm,
+                .ph-landscape,
+                .ph-square-lg,
+                .ph-tall,
+                .ph-wide-short {
+                    min-width: 0;
+                }
+
+                /* Portrait placeholder: let it expand to full width */
+                .ph-portrait {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Flex Row Layout</h1>
+        </header>
+        <main>
+            <!-- Row 1: image left, text right -->
+            <div class="row">
+                <div class="placeholder ph-square-sm ph-a"></div>
+                <div class="text">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Curabitur eu aliquam lorem. Phasellus convallis dictum
+                        risus dignissim pharetra. Mauris nec mauris eget arcu
+                        aliquet fermentum rutrum in purus. Vestibulum lectus
+                        lectus, eleifend ac posuere et, bibendum sed nibh. Sed
+                        in sapien quis quam interdum feugiat vel quis arcu. Orci
+                        varius natoque penatibus et magnis dis parturient
+                        montes, nascetur ridiculus mus. Curabitur at nisi
+                        ultricies, ullamcorper diam nec, venenatis nunc.
+                        Vestibulum quis pulvinar odio. Sed sed ligula dui. Duis
+                        feugiat tellus vel turpis viverra iaculis. Nunc nec
+                        feugiat eros. Etiam placerat dictum euismod. Donec et
+                        laoreet dui, eu viverra ante. Nam et dolor ac neque
+                        interdum hendrerit.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Row 2: text · tall portrait image · text (3 items) -->
+            <div class="row">
+                <div class="text-wide">
+                    <p>
+                        Pellentesque habitant morbi tristique senectus et netus
+                        et malesuada fames ac turpis egestas. Fusce vehicula
+                        libero at enim tincidunt, nec faucibus augue sodales.
+                        Quisque porttitor enim vel diam volutpat, ut fringilla
+                        velit posuere. Integer gravida lorem vitae nisi
+                        fermentum, eu dignissim odio ullamcorper.
+                    </p>
+                </div>
+                <div class="placeholder ph-portrait ph-b"></div>
+                <div class="text-wide">
+                    <p>
+                        Duis at lorem non velit cursus tempus. Proin at urna
+                        facilisis, convallis urna sed, varius felis. Vivamus
+                        condimentum, nisi at faucibus ultricies, risus mauris
+                        laoreet nisl, nec ultrices diam enim ac dolor.
+                        Suspendisse potenti. Morbi imperdiet nisi est, at
+                        gravida enim bibendum in.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Row 3: 4 items — image · text · image · text -->
+            <div class="row">
+                <div class="placeholder ph-square-sm ph-c"></div>
+                <div class="text">
+                    <p>
+                        Aliquam erat volutpat. Cras euismod nisi eu libero
+                        dapibus, vel tincidunt velit consequat. Nam posuere nisl
+                        vitae ligula cursus, at consequat turpis scelerisque.
+                    </p>
+                </div>
+                <div class="placeholder ph-square-lg ph-d"></div>
+                <div class="text">
+                    <p>
+                        Sed tincidunt orci sed felis pharetra hendrerit. Fusce
+                        vel nisl at justo lobortis lacinia. Phasellus commodo
+                        velit eget nisi volutpat, ac interdum quam cursus.
+                        Nullam fringilla felis at lorem fermentum.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Row 4: text · tall image · shorter image -->
+            <div class="row">
+                <div class="text-widest">
+                    <p>
+                        Etiam ultricies nisi vel augue. Curabitur ullamcorper
+                        ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas
+                        tempus, tellus eget condimentum rhoncus, sem quam semper
+                        libero, sit amet adipiscing sem neque sed ipsum. Nam
+                        quam nunc, blandit vel, luctus pulvinar, hendrerit id,
+                        lorem.
+                    </p>
+                </div>
+                <div class="placeholder ph-tall ph-e"></div>
+                <div class="placeholder ph-square-sm ph-f"></div>
+            </div>
+
+            <!-- Row 5: text left · wide landscape image right -->
+            <div class="row">
+                <div class="text">
+                    <p>
+                        Maecenas nec odio et ante tincidunt tempus. Donec vitae
+                        sapien ut libero venenatis faucibus. Nullam quis ante.
+                        Etiam sit amet orci eget eros faucibus tincidunt. Duis
+                        leo. Sed fringilla mauris sit amet nibh. Donec sodales
+                        sagittis magna. Sed consequat, leo eget bibendum
+                        sodales, augue velit cursus nunc.
+                    </p>
+                </div>
+                <div class="placeholder ph-landscape ph-g"></div>
+            </div>
+        </main>
+    </body>
+</html>

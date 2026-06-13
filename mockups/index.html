@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Responsive Grid Mockup</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            body,
+            html {
+                margin: 0;
+            }
+
+            header {
+                margin: 0 auto;
+                padding: 0 1em;
+            }
+            .container {
+                margin: 0 auto;
+                width: 1024px;
+                display: column;
+                column-count: 2;
+                /*grid-template-columns: repeat(2, 1fr);*/
+                /*gap: 1em;*/
+                background-color: lightgray;
+                padding: 1em;
+            }
+
+            .el {
+                /*height: 4rem;*/
+                padding-top: 100%;
+                background-color: gray;
+                margin-bottom: 1em;
+            }
+
+            .xl {
+                background-color: gray;
+                margin-bottom: 1em;
+                column-span: all;
+                padding-top: 50%;
+            }
+        </style>
+    </head>
+    <body>
+        <header><h1>Example Title</h1></header>
+        <main class="container">
+            <div class="xl"></div>
+            <div class="el"></div>
+            <div class="el"></div>
+            <div class="el"></div>
+            <div class="el"></div>
+            <div class="el"></div>
+            <div class="el"></div>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Grid Layout</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            .el {
+                background-color: gray;
+                padding-top: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Grid Layout</h1>
+        </header>
+        <main
+            style="
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1rem;
+            "
+        >
+            <div
+                class="el"
+                style="grid-column-start: 1; grid-column-end: 3"
+            ></div>
+            <div class="el" style="grid-row-start: 2; grid-column-start: 1; grid-column-end: 2;"
+        </main>
+    </body>
+</html>

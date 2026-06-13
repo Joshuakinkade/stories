@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Grid Row Layout</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            /* ── Base ── */
+            body {
+                margin: 0;
+                font-family: sans-serif;
+            }
+
+            header,
+            main {
+                margin: auto;
+                max-width: 1024px;
+                padding: 0 1rem;
+            }
+
+            /* ── Grid ── */
+            /*
+             * 12 equal columns. Each section uses a separate grid so
+             * rows are sized independently of one another.
+             */
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(12, 1fr);
+                gap: 1rem;
+                margin-bottom: 2rem;
+                align-items: start;
+            }
+
+            /* ── Column spans ── */
+            .col-2 {
+                grid-column: span 2;
+            }
+            .col-3 {
+                grid-column: span 3;
+            }
+            .col-4 {
+                grid-column: span 4;
+            }
+            .col-5 {
+                grid-column: span 5;
+            }
+            .col-6 {
+                grid-column: span 6;
+            }
+            .col-7 {
+                grid-column: span 7;
+            }
+            .col-8 {
+                grid-column: span 8;
+            }
+            .col-9 {
+                grid-column: span 9;
+            }
+
+            /* ── Text blocks ── */
+            .text p {
+                margin-top: 0;
+            }
+
+            /* ── Placeholder blocks ── */
+            .placeholder {
+                background-color: gray;
+            }
+
+            .ph-landscape {
+                aspect-ratio: 16 / 9;
+            }
+            .ph-portrait {
+                aspect-ratio: 3 / 4;
+            }
+            .ph-square {
+                aspect-ratio: 1 / 1;
+            }
+            .ph-tall {
+                aspect-ratio: 2 / 3;
+            }
+            .ph-wide-short {
+                aspect-ratio: 3 / 1;
+            }
+
+            /* shade variants */
+            .ph-a {
+                background-color: #808080;
+            }
+            .ph-b {
+                background-color: #9e9e9e;
+            }
+            .ph-c {
+                background-color: #b0b0b0;
+            }
+            .ph-d {
+                background-color: #888888;
+            }
+            .ph-e {
+                background-color: #a0a0a0;
+            }
+            .ph-f {
+                background-color: #c0c0c0;
+            }
+            .ph-g {
+                background-color: #999999;
+            }
+
+            /* ── Responsive: single column on narrow screens ── */
+            @media (max-width: 600px) {
+                .grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .col-2,
+                .col-3,
+                .col-4,
+                .col-5,
+                .col-6,
+                .col-7,
+                .col-8,
+                .col-9 {
+                    grid-column: span 1;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Grid Row Layout</h1>
+        </header>
+        <main>
+            <!-- Section 1: placeholder (4 cols) · text (8 cols) -->
+            <div class="grid">
+                <div class="placeholder ph-square ph-a col-4"></div>
+                <div class="text col-8">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Curabitur eu aliquam lorem. Phasellus convallis dictum
+                        risus dignissim pharetra. Mauris nec mauris eget arcu
+                        aliquet fermentum rutrum in purus. Vestibulum lectus
+                        lectus, eleifend ac posuere et, bibendum sed nibh. Sed
+                        in sapien quis quam interdum feugiat vel quis arcu. Orci
+                        varius natoque penatibus et magnis dis parturient
+                        montes, nascetur ridiculus mus. Curabitur at nisi
+                        ultricies, ullamcorper diam nec, venenatis nunc.
+                        Vestibulum quis pulvinar odio. Sed sed ligula dui. Duis
+                        feugiat tellus vel turpis viverra iaculis. Nunc nec
+                        feugiat eros. Etiam placerat dictum euismod. Donec et
+                        laoreet dui, eu viverra ante. Nam et dolor ac neque
+                        interdum hendrerit.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 2: text (5 cols) · portrait placeholder (2 cols) · text (5 cols) -->
+            <div class="grid">
+                <div class="text col-5">
+                    <p>
+                        Pellentesque habitant morbi tristique senectus et netus
+                        et malesuada fames ac turpis egestas. Fusce vehicula
+                        libero at enim tincidunt, nec faucibus augue sodales.
+                        Quisque porttitor enim vel diam volutpat, ut fringilla
+                        velit posuere. Integer gravida lorem vitae nisi
+                        fermentum, eu dignissim odio ullamcorper.
+                    </p>
+                </div>
+                <div class="placeholder ph-portrait ph-b col-2"></div>
+                <div class="text col-5">
+                    <p>
+                        Duis at lorem non velit cursus tempus. Proin at urna
+                        facilisis, convallis urna sed, varius felis. Vivamus
+                        condimentum, nisi at faucibus ultricies, risus mauris
+                        laoreet nisl, nec ultrices diam enim ac dolor.
+                        Suspendisse potenti. Morbi imperdiet nisi est, at
+                        gravida enim bibendum in.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 3: 4 items — square · text · square · text (3 cols each) -->
+            <div class="grid">
+                <div class="placeholder ph-square ph-c col-3"></div>
+                <div class="text col-3">
+                    <p>
+                        Aliquam erat volutpat. Cras euismod nisi eu libero
+                        dapibus, vel tincidunt velit consequat. Nam posuere nisl
+                        vitae ligula cursus, at consequat turpis scelerisque.
+                        Quisque in felis vel velit laoreet sodales ut id augue.
+                    </p>
+                </div>
+                <div class="placeholder ph-square ph-d col-3"></div>
+                <div class="text col-3">
+                    <p>
+                        Sed tincidunt orci sed felis pharetra hendrerit. Fusce
+                        vel nisl at justo lobortis lacinia. Phasellus commodo
+                        velit eget nisi volutpat, ac interdum quam cursus.
+                        Nullam fringilla felis at lorem fermentum.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 4: wide landscape placeholder (12 cols) spanning full width -->
+            <div class="grid">
+                <div class="placeholder ph-landscape ph-e col-9"></div>
+                <div class="text col-3">
+                    <p>
+                        Etiam ultricies nisi vel augue. Curabitur ullamcorper
+                        ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas
+                        tempus, tellus eget condimentum rhoncus, sem quam semper
+                        libero, sit amet adipiscing sem neque sed ipsum.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 5: tall placeholder (3 cols) · text (5 cols) · portrait placeholder (4 cols) -->
+            <div class="grid">
+                <div class="placeholder ph-tall ph-f col-3"></div>
+                <div class="text col-5">
+                    <p>
+                        Maecenas nec odio et ante tincidunt tempus. Donec vitae
+                        sapien ut libero venenatis faucibus. Nullam quis ante.
+                        Etiam sit amet orci eget eros faucibus tincidunt. Duis
+                        leo. Sed fringilla mauris sit amet nibh. Donec sodales
+                        sagittis magna. Sed consequat, leo eget bibendum
+                        sodales, augue velit cursus nunc. Aenean vulputate
+                        eleifend tellus. Aenean leo ligula, porttitor eu,
+                        consequat vitae, eleifend ac, enim.
+                    </p>
+                </div>
+                <div class="placeholder ph-portrait ph-g col-4"></div>
+            </div>
+        </main>
+    </body>
+</html>
