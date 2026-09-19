@@ -1,0 +1,16 @@
+version: "2"
+cloud:
+    organization: ""
+    project: ""
+    hostname: ""
+sql:
+  - schema: "db/schema.sql"
+    queries: "db/queries.sql"
+    engine: "postgresql"
+    gen:
+      go:
+        out: "db/sqlc"
+        package: "db"
+plugins: []
+rules: []
+options: {}
