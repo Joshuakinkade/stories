@@ -1,22 +1,23 @@
 package photos
 
-type PhotoService struct {
+import "github.com/google/uuid"
 
+type PhotoService struct {
 }
 
 func (ps PhotoService) UploadPhoto() error {
-	p := NewPhoto()
+	// p := NewPhoto()
 
 	// open temp photo file
-	
+
 	// reorient based on exif data or something else
 	// resize if too big, maybe 2mb
 	// save to photo store
-	
+
 	// extract some metadata: height, width, date taken, location, etc.
 	// save metadata to photo struct
-  // save photo
-	
+	// save photo
+
 	return nil
 }
 

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -9,15 +8,14 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/joho/godotenv"
 	"github.com/joshuakinkade/web-journal/db"
-	"github.com/joshuakinkade/web-journal/handlers"
+	"github.com/joshuakinkade/web-journal/web"
 )
 
 func main() {
 	godotenv.Load(".env")
 
-	userHandler := handlers.UserHandlers{}
+	userHandler := web.UserHandlers{}
 
-	fmt.Println(os.Getenv("DB_PORT"))
 	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
 		log.Panic("port not valid", err)
@@ -42,6 +40,14 @@ func main() {
 
 	app.Post("/register", userHandler.Register)
 	app.Post("/login", userHandler.Login)
+
+	app.Use(web.AuthMiddleware)
+
+	app.Post("/settings", func(ctx fiber.Ctx) error {
+		ctx.WriteString("Hello, World!")
+		ctx.Status(200)
+		return nil
+	})
 
 	app.Listen(":8080")
 }

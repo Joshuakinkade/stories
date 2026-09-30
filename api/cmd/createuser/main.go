@@ -13,7 +13,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/joshuakinkade/web-journal/db"
 	"github.com/joshuakinkade/web-journal/dtos"
-	"github.com/joshuakinkade/web-journal/services"
+	"github.com/joshuakinkade/web-journal/users"
 	"github.com/joshuakinkade/web-journal/validation"
 	"golang.org/x/term"
 )
@@ -98,7 +98,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	svc := services.UserService{}
+	svc := users.Service{}
 	input := dtos.NewUserInput{
 		Email:           email,
 		DisplayName:     displayName,

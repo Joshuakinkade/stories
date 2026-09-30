@@ -9,3 +9,7 @@ export type SignupState = {
 export type LoginState = {
   error?: string
 } | null;
+
+export type SaveSettingsState = {
+  error?: string
+} | null;

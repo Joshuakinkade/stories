@@ -24,14 +24,11 @@ export async function startSession(session: Session) {
   ironSession.authToken = session.authToken;
   ironSession.userId = session.userId;
   ironSession.userEmail = session.userEmail;
-  console.log(ironSession);
   await ironSession.save();
-  console.log("saved");
 }
 
 export async function destroySession(): Promise<null> {
   const session = await getIronSession<Session>(await cookies(), { password: SESSION_PASSWORD, cookieName: "auth" });
-  console.log(session);
   session.destroy();
   return null;
 }

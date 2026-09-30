@@ -1,11 +1,12 @@
 "use client";
 
+import { saveSettings } from "@/app/lib/actions/settings";
+import { SaveSettingsState } from "@/app/lib/types";
 import { Button, Description, FieldError, Fieldset, Form, Input, Label, Modal, TextField } from "@heroui/react";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 
 function UpdatePasswordForm() {
   const [showPasswordField, setShowPasswordField] = useState(false);
-
   return (<Modal>
     <Button onClick={() => setShowPasswordField(true)}>Update Password</Button>
     {showPasswordField && <Modal.Backdrop>
@@ -15,6 +16,7 @@ function UpdatePasswordForm() {
           <Modal.Body>
             <Form>
               <Fieldset>
+                <Fieldset.Group>
                 <TextField variant="secondary">
                   <Label>Current Password</Label>
                   <Input type="password" name="current_password"/>
@@ -29,10 +31,11 @@ function UpdatePasswordForm() {
                   <Label>Confirm Password</Label>
                   <Input type="password" name="confirm_password"/>
                   <FieldError/>
-                </TextField>
-              </Fieldset>
-              <Fieldset>
-                <Button type="submit"></Button>
+                  </TextField>
+                </Fieldset.Group>
+              <Fieldset.Actions>
+                <Button type="submit">Save Password</Button>
+                </Fieldset.Actions>
               </Fieldset>
             </Form>
           </Modal.Body>
@@ -44,7 +47,9 @@ function UpdatePasswordForm() {
 }
 
 export default function SettingsForm() {
-  return (<Form>
+  const [settingsState, saveSettingsAction, savePending] = useActionState<SaveSettingsState, FormData>(saveSettings, null);
+
+  return (<Form action={saveSettingsAction}>
     <Fieldset>
       <Fieldset.Group>
         <Fieldset.Legend>Account Settings</Fieldset.Legend>
@@ -66,8 +71,7 @@ export default function SettingsForm() {
         </TextField>
       </Fieldset.Group>
       <Fieldset.Actions>
-        <Button type="submit" variant="primary">Save</Button>
-        <Button type="reset" variant="secondary">Cacnel</Button>
+        <Button type="submit" variant="primary" isDisabled={savePending}>Save</Button>
       </Fieldset.Actions>
     </Fieldset>
   </Form>)

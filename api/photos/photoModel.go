@@ -7,11 +7,11 @@ import (
 )
 
 type Photo struct {
-	id uuid.UUID
-	altText string
-	caption string
-	height int
-	width int
+	id        uuid.UUID
+	altText   string
+	caption   string
+	height    int
+	width     int
 	createdAt time.Time
 	updatedAt time.Time
 
@@ -22,15 +22,15 @@ func NewPhoto() Photo {
 	id, _ := uuid.NewV7()
 	createdAt := time.Now()
 	p := Photo{
-		id: id
-		createdAt: createdAt
+		id:        id,
+		createdAt: createdAt,
 	}
 
-  return p
+	return p
 }
 
 func (p Photo) ID() uuid.UUID {
-	return p
+	return uuid.UUID{}
 }
 
 func (p Photo) AltText() string {
@@ -51,7 +51,7 @@ func (p *Photo) SetCaption(newCaption string) {
 
 func (p *Photo) Save() error {
 	p.updatedAt = time.Now()
-	
+
 	if p.isNew {
 		// insert
 	} else {
@@ -62,8 +62,7 @@ func (p *Photo) Save() error {
 }
 
 func FindPhoto() (Photo, error) {
-  return Photo{}, nil
+	return Photo{}, nil
 }
 
 /************************************** QUERY METHODS BELOW **************************************/
-

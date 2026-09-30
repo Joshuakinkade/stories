@@ -1,4 +1,4 @@
-package handlers
+package web
 
 import (
 	"log"
@@ -31,9 +31,9 @@ func (h UserHandlers) Register(ctx fiber.Ctx) error {
 }
 
 type LoginResponse struct {
-	User users.User `json:"user"`
-	Token string    `json:"token"`
-	Error string    `json:"error"`
+	User  users.User `json:"user"`
+	Token string     `json:"token"`
+	Error string     `json:"error"`
 }
 
 func (h UserHandlers) Login(ctx fiber.Ctx) error {
@@ -63,7 +63,7 @@ func (h UserHandlers) Login(ctx fiber.Ctx) error {
 
 	ctx.Status(200)
 	ctx.JSON(LoginResponse{
-		User: u,
+		User:  u,
 		Token: authToken,
 	})
 	return nil

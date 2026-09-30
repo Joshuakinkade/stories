@@ -1,15 +1,16 @@
 package photos
 
-type Store struct {
+import "github.com/google/uuid"
 
+type Store struct {
 }
 
 func NewStore() Store {
-
+	return Store{}
 }
 
 func (s Store) Save(tempFileName string, photoId uuid.UUID, albumId uuid.UUID) error {
-  return nil
+	return nil
 }
 
 func (s Store) Get()
