@@ -2,52 +2,69 @@ package auth
 
 import (
 	"errors"
-	"log"
-	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
-func CreateAccessToken(userID uuid.UUID) (string, error) {
+type Manager struct {
+	authkey    []byte
+	refreshKey []byte
+}
+
+func New(authKey []byte, refreshKey []byte) Manager {
+	return Manager{
+		authkey:    authKey,
+		refreshKey: refreshKey,
+	}
+}
+
+func (as Manager) CreateAccessToken(userID uuid.UUID) (string, error) {
 	expiration := time.Now().Add(time.Hour * 24)
 	claims := jwt.MapClaims{
 		"exp": expiration.Unix(),
 		"sub": userID.String(),
+		"iat": time.Now().Unix(),
+		"jti": uuid.New(),
 	}
-	return createTokenWithClaims(claims)
+	return as.createTokenWithClaims(claims, as.authkey)
 }
 
-func CreateRefreshToken(userID uuid.UUID) (string, error) {
+func (as Manager) CreateRefreshToken(userID uuid.UUID) (string, error) {
+	expiration := time.Now().Add(time.Hour * 24 * 7)
 	claims := jwt.MapClaims{
+		"exp": expiration.Unix(),
 		"sub": userID.String(),
+		"iat": time.Now().Unix(),
+		"jti": uuid.New(),
 	}
-	return createTokenWithClaims(claims)
+	return as.createTokenWithClaims(claims, as.refreshKey)
 }
 
-func createTokenWithClaims(claims jwt.MapClaims) (string, error) {
-	key := os.Getenv("AUTH_KEY")
-	if key == "" {
-		log.Panic("Environment error: AUTH_KEY not set!")
-	}
+func (as Manager) createTokenWithClaims(claims jwt.MapClaims, key []byte) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(key))
+	return token.SignedString(key)
 }
 
-func CheckJWT(tokenString string) error {
+func (as Manager) CheckJWT(tokenString string) (string, error) {
 	var claims jwt.MapClaims
 	token, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (any, error) {
-		return []byte(os.Getenv("AUTH_KEY")), nil
-	})
+		return as.authkey, nil
+	}, jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}))
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if !token.Valid {
-		return errors.New("Auth Error")
+		return "", errors.New("Auth Error")
 	}
 
-	return nil
+	userId, err := token.Claims.GetSubject()
+	if err != nil {
+		return "", errors.New("Could not get userID")
+	}
+
+	return userId, nil
 }

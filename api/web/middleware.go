@@ -7,7 +7,17 @@ import (
 	"github.com/joshuakinkade/web-journal/auth"
 )
 
-func AuthMiddleware(c fiber.Ctx) error {
+type Middleware struct {
+	auth auth.Manager
+}
+
+func NewMiddleware(a auth.Manager) Middleware {
+	return Middleware{
+		auth: a,
+	}
+}
+
+func (m Middleware) AuthMiddleware(c fiber.Ctx) error {
 	const prefix = "Bearer "
 	authHeader := c.Get("Authorization")
 	if authHeader == "" {
@@ -22,10 +32,10 @@ func AuthMiddleware(c fiber.Ctx) error {
 	}
 	token := strings.TrimPrefix(authHeader, prefix)
 
-	authErr := auth.CheckJWT(token)
+	_, authErr := m.auth.CheckJWT(token)
 	if authErr != nil {
 		c.Status(401)
-		c.Write([]byte(authErr.Error()))
+		c.WriteString(authErr.Error())
 		return nil
 	}
 	return c.Next()

@@ -2,7 +2,7 @@
 
 import { saveSettings } from "@/app/lib/actions/settings";
 import { SaveSettingsState } from "@/app/lib/types";
-import { Button, Description, FieldError, Fieldset, Form, Input, Label, Modal, TextField } from "@heroui/react";
+import { Button, Description, ErrorMessage, FieldError, Fieldset, Form, Input, Label, Modal, TextField } from "@heroui/react";
 import { useActionState, useState } from "react";
 
 function UpdatePasswordForm() {
@@ -50,6 +50,7 @@ export default function SettingsForm() {
   const [settingsState, saveSettingsAction, savePending] = useActionState<SaveSettingsState, FormData>(saveSettings, null);
 
   return (<Form action={saveSettingsAction}>
+    {settingsState && <ErrorMessage>{settingsState.error}</ErrorMessage>}
     <Fieldset>
       <Fieldset.Group>
         <Fieldset.Legend>Account Settings</Fieldset.Legend>

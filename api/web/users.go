@@ -13,6 +13,12 @@ type UserHandlers struct {
 	users users.Service
 }
 
+func NewUserHandlers(u users.Service) UserHandlers {
+	return UserHandlers{
+		users: u,
+	}
+}
+
 func (h UserHandlers) Register(ctx fiber.Ctx) error {
 	newUser := dtos.NewUserInput{
 		Email:           ctx.FormValue("email"),

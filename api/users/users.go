@@ -11,6 +11,13 @@ import (
 )
 
 type Service struct {
+	auth auth.Manager
+}
+
+func NewService(a auth.Manager) Service {
+	return Service{
+		auth: a,
+	}
 }
 
 func (s *Service) CreateUser(newUser dtos.NewUserInput, isAdmin bool) (User, error) {
@@ -90,12 +97,12 @@ func (s Service) LoginUser(email, password string) (User, string, string, error)
 		return User{}, "", "", errors.New("password invalid")
 	}
 
-	authToken, err := auth.CreateAccessToken(user.ID())
+	authToken, err := s.auth.CreateAccessToken(user.ID())
 	if err != nil {
 		return User{}, "", "", err
 	}
 
-	refreshToken, err := auth.CreateRefreshToken(user.ID())
+	refreshToken, err := s.auth.CreateRefreshToken(user.ID())
 	if err != nil {
 		return User{}, "", "", err
 	}

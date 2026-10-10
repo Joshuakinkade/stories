@@ -1,6 +1,7 @@
 "use server"
 
-import { loadSession } from "../session";
+import { redirect } from "next/navigation";
+import { destroySession, loadSession } from "../session";
 import { SaveSettingsState } from "../types";
 
 export async function saveSettings(prevState: unknown, formData: FormData): Promise<SaveSettingsState> {
@@ -14,6 +15,16 @@ export async function saveSettings(prevState: unknown, formData: FormData): Prom
   request.headers.set("Authorization", `Bearer ${sess.authToken}`);
 
   const response = await fetch(request);
-  console.log(response.status, await response.text());
-  return null;
+  if (response.status < 300) {
+    return null;
+  }
+  else if (response.status == 401) {
+    console.log(await response.text());
+    await destroySession();
+    return redirect("/")
+  } else {
+    return {
+      error: "Server error"
+    }
+  }
 }

@@ -7,14 +7,29 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/joho/godotenv"
+	"github.com/joshuakinkade/web-journal/auth"
 	"github.com/joshuakinkade/web-journal/db"
+	"github.com/joshuakinkade/web-journal/users"
 	"github.com/joshuakinkade/web-journal/web"
 )
 
 func main() {
 	godotenv.Load(".env")
 
-	userHandler := web.UserHandlers{}
+	authKey := os.Getenv("AUTH_KEY")
+	if len(authKey) < 32 {
+		log.Panic("Invalid AUTH_KEY")
+	}
+	refreshKey := os.Getenv("REFRESH_KEY")
+	if len(refreshKey) < 32 {
+		log.Panic("Invalid REFRESH_KEY")
+	}
+	authService := auth.New([]byte(authKey), []byte(refreshKey))
+
+	u := users.NewService(authService)
+	userHandler := web.NewUserHandlers(u)
+
+	m := web.NewMiddleware(authService)
 
 	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
@@ -41,7 +56,7 @@ func main() {
 	app.Post("/register", userHandler.Register)
 	app.Post("/login", userHandler.Login)
 
-	app.Use(web.AuthMiddleware)
+	app.Use(m.AuthMiddleware)
 
 	app.Post("/settings", func(ctx fiber.Ctx) error {
 		ctx.WriteString("Hello, World!")
