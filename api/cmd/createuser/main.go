@@ -11,6 +11,7 @@ import (
 	"syscall"
 
 	"github.com/joho/godotenv"
+	"github.com/joshuakinkade/web-journal/auth"
 	"github.com/joshuakinkade/web-journal/db"
 	"github.com/joshuakinkade/web-journal/dtos"
 	"github.com/joshuakinkade/web-journal/users"
@@ -98,7 +99,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	svc := users.Service{}
+	svc := users.NewService(auth.Manager{}, users.NewRepository())
 	input := dtos.NewUserInput{
 		Email:           email,
 		DisplayName:     displayName,

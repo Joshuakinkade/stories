@@ -21,8 +21,8 @@ The project is separated into two main parts: the backend web api, responsible f
 ### User Pages
 
 This is the main feature of this app. They should be fast to load, not too heavy on resources, and responsive to different screens.
-- pages need to be cached to avoid having to rerender them on every request.
-- use responsive photo sizes and effecient formats for each browser (webp, heic, etc.)
+- pages need to be cached to avoid having to re-render them on every request.
+- use responsive photo sizes and efficient formats for each browser (webp, heic, etc.)
 - should include a full size viewer for photos on the page that allows swiping between pictures in the order they appear on the page.
 - should be optionally password protected so users can control who can see their pages.
 - should be themeable
@@ -44,7 +44,7 @@ This is the main feature of this app. They should be fast to load, not too heavy
 - the user can edit a page by clicking the edit button on the card in the browser. This opens the editor for that page.
 - needs to allow dragging and dropping elements of various types onto a canvas to build the page.
 - should group elements into rows with 1-4 elements each.
-- elements should take up all availble space in a row
+- elements should take up all available space in a row
 - when a user drops an element at the bottom of the page, create a new row and add the element to it.
 - when a user drops an element onto an existing row, the element should be added to the row at it's drop point. If the row is full, the last element in the row should be moved to a new row. The dropped element should be placed at it's drop point in the existing row.
 - specifics of how adding elements to page will probably change as I play with it.
@@ -71,7 +71,7 @@ architecture-beta
 
 ### Overview
 
-This project is largely a place for me to experiment with application architecutre, drawing on my experience from my job over the past 13 years and some ideas I've had while working but couldn't implement, and some other research I've done. It is built with a service layer that uses full featured models to provide the application's functionality and provides an interface for the REST API and some maintenance commands to use.
+This project is largely a place for me to experiment with application architecture, drawing on my experience from my job over the past 13 years and some ideas I've had while working but couldn't implement, and some other research I've done. It is built with a service layer that uses full featured models to provide the application's functionality and provides an interface for the REST API and some maintenance commands to use.
 
 ### Services
 
@@ -79,17 +79,17 @@ Services provide the bulk of the application's business logic and provide a well
 
 ### Models
 
-Models follow the active record pattern, because my data model is simple amd mostly just doing CRUD operations. I didn't want the complexity of adding a mapping layer to this project. Sql queries are constant hard coded, hand optimized strings defined above the model methods that execute them. I've shied away from dynamic query builders because I've seen them lead to hard to optimize and anyalyze queries that can take down a production database. I've used sqlc in the past to generate go code from queries, but I didn't think it integrated well into this project. For one thing, it created extra models that I didn't want to use. So this project is using manually written row scanning code. It's a little repetetive, but not too complicated to write.
+Models follow the active record pattern, because my data model is simple and mostly just doing CRUD operations. I didn't want the complexity of adding a mapping layer to this project. SQL queries are constant hard coded, hand optimized strings defined above the model methods that execute them. I've shied away from dynamic query builders because I've seen them lead to hard to optimize and analyze queries that can take down a production database. I've used sqlc in the past to generate go code from queries, but I didn't think it integrated well into this project. For one thing, it created extra models that I didn't want to use. So this project is using manually written row scanning code. It's a little repetitive, but not too complicated to write.
 
 Still thinking about the best way of relating models to tables.
 
 ### Handlers
 
-The REST api is defined in a series of handlers. They are strictly responsible for processing user input, calling a service, and returning a response.
+The REST API is defined in a series of handlers. They are strictly responsible for processing user input, calling a service, and returning a response.
 
 ### Challenges and Learning
 
-- how to divide some functionality. Specifically validation. It makes sense for models to validate their own data, but I found it cumbersome to add it to the models. It also make sense that it would happen in the handlers and cli tools which directly take user input.
+- how to divide some functionality. Specifically validation. It makes sense for models to validate their own data, but I found it cumbersome to add it to the models. It also make sense that it would happen in the handlers and CLI tools which directly take user input.
 - model relationships. I like the idea of having one model per table. It seems obvious and clean. But then how do I pull related models efficiently?
   - Need to avoid cycles
 
@@ -99,9 +99,9 @@ Different ideas for this:
 - Go backend with react frontend. 
   - Publish pages as static html files.
   - Or, whole site is a single page app.
-- build with nextjs for more unified frontend and backend. Relying on Vercel's deployment architecture is too much vendor lock-in for me.
+- build with next.js for more unified frontend and backend. Relying on Vercel's deployment architecture is too much vendor lock-in for me.
 
-Going with the go backend because I can make a good solid webservice in go more easily in nextjs. Go is going to be faster than javascript.
+Going with the go backend because I can make a good solid web service in go more easily in next.js. Go is going to be faster than JavaScript.
 
 Nextjs frontend for dynamic 
 

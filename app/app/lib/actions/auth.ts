@@ -21,7 +21,7 @@ export async function signup(prevState: unknown, formData: FormData): Promise<Si
       userId: data.user.userId,
       userEmail: data.user.userEmail,
     });
-    redirect("/");
+    redirect("/dashboard");
   } else {
     const error = await response.json();
     console.error(response.statusText);

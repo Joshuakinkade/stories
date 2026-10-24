@@ -26,7 +26,7 @@ func main() {
 	}
 	authService := auth.New([]byte(authKey), []byte(refreshKey))
 
-	u := users.NewService(authService)
+	u := users.NewService(authService, users.NewRepository())
 	userHandler := web.NewUserHandlers(u)
 
 	m := web.NewMiddleware(authService)
@@ -57,6 +57,9 @@ func main() {
 	app.Post("/login", userHandler.Login)
 
 	app.Use(m.AuthMiddleware)
+
+	app.Get("/user-details", userHandler.GetUser)
+	app.Patch("/user", userHandler.UpdateUser)
 
 	app.Post("/settings", func(ctx fiber.Ctx) error {
 		ctx.WriteString("Hello, World!")

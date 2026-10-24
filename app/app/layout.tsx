@@ -21,12 +21,10 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-background text-foreground">
-        <Providers>
           <div>
             <SiteHeader/>
             {children}
           </div>
-        </Providers>
       </body>
     </html>
   );

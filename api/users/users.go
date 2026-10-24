@@ -3,6 +3,7 @@ package users
 import (
 	"context"
 	"errors"
+	"log"
 
 	"github.com/google/uuid"
 	"github.com/joshuakinkade/web-journal/auth"
@@ -12,11 +13,13 @@ import (
 
 type Service struct {
 	auth auth.Manager
+	repo Repository
 }
 
-func NewService(a auth.Manager) Service {
+func NewService(a auth.Manager, r Repository) Service {
 	return Service{
 		auth: a,
+		repo: r,
 	}
 }
 
@@ -34,7 +37,7 @@ func (s *Service) CreateUser(newUser dtos.NewUserInput, isAdmin bool) (User, err
 		u.AddRole(UserAdminRole)
 	}
 
-	err = u.Save()
+	err = s.repo.Create(context.Background(), &u)
 	if err != nil {
 		return User{}, err
 	}
@@ -60,7 +63,7 @@ func (s *Service) CreateUserWithCode(newUser dtos.NewUserInput, code string) (Us
 	// Create User
 	u := NewUser(newUser.Email, newUser.DisplayName, newUser.Password)
 	u.AddRole(UserAuthorRole)
-	err = u.Save()
+	err = s.repo.Create(context.Background(), &u)
 	if err != nil {
 		return User{}, err
 	}
@@ -73,7 +76,7 @@ func (s *Service) CreateUserWithCode(newUser dtos.NewUserInput, code string) (Us
 func validateUser(newUser dtos.NewUserInput) error {
 	errors := map[string]string{}
 
-	if err := validation.ValidateEmail(newUser.Email); err != nil {
+	if _, err := validation.ValidateEmail(newUser.Email); err != nil {
 		errors["email"] = err.Error()
 	}
 	if newUser.Password != newUser.ConfirmPassword {
@@ -88,7 +91,7 @@ func validateUser(newUser dtos.NewUserInput) error {
 }
 
 func (s Service) LoginUser(email, password string) (User, string, string, error) {
-	user, err := FindByEmail(context.Background(), email)
+	user, err := s.repo.FindByEmail(context.Background(), email)
 	if user.ID() == uuid.Nil {
 		return User{}, "", "", err
 	}
@@ -114,21 +117,37 @@ func (s Service) ListUsers() ([]User, error) {
 	return nil, nil
 }
 
-// DO THIS LATER, need to think about how to pass typed updates
-// type UpdateField string
+func (s Service) GetByUserID(userID uuid.UUID) (User, error) {
+	user, err := s.repo.FindByID(context.Background(), userID)
+	if err != nil {
+		return User{}, err
+	}
 
-// const DisplayName UpdateField = "displayName"
-// const Password UpdateField = "password"
+	return user, err
+}
 
-// func (s UserService) UpdateUser(id uuid.UUID, updates map[UpdateField]any) error {
-// 	u, err := FindByID(id)
-// 	if err != nil { // Also need to check for not found
-// 		return err
-// 	}
+func (s Service) UpdateUser(userId uuid.UUID, update dtos.UserUpdate) error {
+	u, err := s.repo.FindByID(context.Background(), userId)
+	if err != nil {
+		return err
+	}
 
-// 	if value, ok := updates[DisplayName]; ok {
+	if update.Email != nil {
+		u.SetEmail(*update.Email)
+	}
 
-// 	}
+	if update.DisplayName != nil {
+		u.SetDisplayName(*update.DisplayName)
+	}
 
-// 	return nil
-// }
+
+	if update.Password != nil && update.ConfirmPassword != nil {
+		log.Println("%v %v", *update.Password, *update.ConfirmPassword)
+		if *update.Password == *update.ConfirmPassword {
+			u.SetPassword(*update.Password)
+		}
+	}
+
+	return s.repo.Update(context.Background(), &u)
+	return nil
+}

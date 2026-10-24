@@ -1,6 +1,7 @@
 "use client";
 
 import { saveSettings } from "@/app/lib/actions/settings";
+import { User } from "@/app/lib/services/users";
 import { SaveSettingsState } from "@/app/lib/types";
 import { Button, Description, ErrorMessage, FieldError, Fieldset, Form, Input, Label, Modal, TextField } from "@heroui/react";
 import { useActionState, useState } from "react";
@@ -46,23 +47,32 @@ function UpdatePasswordForm() {
   );
 }
 
-export default function SettingsForm() {
-  const [settingsState, saveSettingsAction, savePending] = useActionState<SaveSettingsState, FormData>(saveSettings, null);
+type SettingsFormProps = {
+  user: User
+}
+
+export default function SettingsForm({user}: SettingsFormProps) {
+  const [settingsState, saveSettingsAction, savePending] = useActionState<SaveSettingsState, FormData>(saveSettings, null)
+  const [slug, setSlug] = useState<string>(user.slug);
+
+  const updateSlug = (value: string) => {
+    setSlug(value.toLocaleLowerCase().replaceAll(" ", "-"));
+  }
 
   return (<Form action={saveSettingsAction}>
     {settingsState && <ErrorMessage>{settingsState.error}</ErrorMessage>}
     <Fieldset>
       <Fieldset.Group>
-        <Fieldset.Legend>Account Settings</Fieldset.Legend>
-        <TextField variant="secondary">
+        <Fieldset.Legend>Account</Fieldset.Legend>
+        <TextField variant="secondary" defaultValue={user.displayName} onChange={updateSlug}>
           <Label>Display Name</Label>
-          <Input name="display_name" type="text" placeholder="Josh K" />
-          <Description>Will show as joshua-kinkade in urls.</Description>
+          <Input name="display_name" type="text" placeholder="Josh K"/>
+          <Description>Shows as {slug} in urls.</Description>
           <FieldError />
         </TextField>
         <UpdatePasswordForm/>
       </Fieldset.Group>
-      <Fieldset.Group>
+      {/*<Fieldset.Group>
         <Fieldset.Legend>Gallery Settings</Fieldset.Legend>
         <Description>Customize the look and feel of your public gallery.</Description>
         <TextField variant="secondary">
@@ -70,7 +80,7 @@ export default function SettingsForm() {
           <Input name="bg_color" type="text" placeholder="#fcf729" />
           <FieldError />
         </TextField>
-      </Fieldset.Group>
+      </Fieldset.Group>*/}
       <Fieldset.Actions>
         <Button type="submit" variant="primary" isDisabled={savePending}>Save</Button>
       </Fieldset.Actions>

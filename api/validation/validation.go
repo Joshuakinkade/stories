@@ -19,10 +19,40 @@ func (ve Error) Error() string {
 	return strings.Join(msgs, " | ")
 }
 
-func ValidateEmail(email string) error {
-	re := regexp.MustCompile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
-	if re.Match([]byte(email)) {
-		return nil
+type StringRequirements struct {
+	minLength int
+	maxLength int
+	match     *regexp.Regexp
+}
+
+func ValidateString(value any, reqs StringRequirements) (string, error) {
+	str, ok := value.(string)
+	if !ok {
+		return "", fmt.Errorf("%v is not a string", value)
 	}
-	return errors.New("email is invalid")
+
+	if len(str) < reqs.minLength {
+		return "", fmt.Errorf("%v must be at least %v characters long", value, reqs.minLength)
+	}
+
+	if len(str) > reqs.maxLength {
+		return "", fmt.Errorf("%v must be no more than %v characters long", value, reqs.maxLength)
+	}
+
+	if !reqs.match.Match([]byte(str)) {
+		return "", fmt.Errorf("%v doesn't match pattern", value)
+	}
+
+	return str, nil
+}
+
+func ValidateEmail(value any) (string, error) {
+	reqs := StringRequirements{
+		match: regexp.MustCompile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"),
+	}
+	email, err := ValidateString(value, reqs)
+	if err != nil {
+		return "", errors.New("email is invalid")
+	}
+	return email, nil
 }
