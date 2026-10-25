@@ -6,7 +6,6 @@ import { SaveSettingsState } from "../types";
 import { revalidatePath } from "next/cache";
 
 export async function saveSettings(prevState: unknown, formData: FormData): Promise<SaveSettingsState> {
-  console.log(formData);
   const request = new Request(`${process.env.API_BASE_URL}/user`, {
     method: "PATCH",
     body: formData,

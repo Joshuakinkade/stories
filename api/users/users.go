@@ -3,7 +3,6 @@ package users
 import (
 	"context"
 	"errors"
-	"log"
 
 	"github.com/google/uuid"
 	"github.com/joshuakinkade/web-journal/auth"
@@ -142,12 +141,10 @@ func (s Service) UpdateUser(userId uuid.UUID, update dtos.UserUpdate) error {
 
 
 	if update.Password != nil && update.ConfirmPassword != nil {
-		log.Println("%v %v", *update.Password, *update.ConfirmPassword)
 		if *update.Password == *update.ConfirmPassword {
 			u.SetPassword(*update.Password)
 		}
 	}
 
 	return s.repo.Update(context.Background(), &u)
-	return nil
 }

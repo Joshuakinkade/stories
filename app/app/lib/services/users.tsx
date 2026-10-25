@@ -1,5 +1,3 @@
-import { loadSession } from "../session";
-
 export interface User {
   id: string
   email: string
@@ -9,12 +7,13 @@ export interface User {
 
 const API_BASE_URL = process.env.API_BASE_URL || '';
 
-export async function getUser(): Promise<User | null> {
-  const session = await loadSession();
-
+export async function getUser(authToken: string): Promise<User | null> {
+  if (!authToken) {
+    return null;
+  }
 
   const request = new Request(`${API_BASE_URL}/user-details`);
-  request.headers.append("Authorization", `Bearer ${session.authToken}`)
+  request.headers.append("Authorization", `Bearer ${authToken}`)
 
   try {
     const response = await fetch(request);
