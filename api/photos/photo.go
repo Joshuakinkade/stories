@@ -49,20 +49,11 @@ func (p *Photo) SetCaption(newCaption string) {
 	p.caption = newCaption
 }
 
-func (p *Photo) Save() error {
-	p.updatedAt = time.Now()
-
-	if p.isNew {
-		// insert
-	} else {
-		// update
-	}
-
-	return nil
+func (p Photo) Dimensions() (int, int) {
+	return p.height, p.width
 }
 
-func FindPhoto() (Photo, error) {
-	return Photo{}, nil
+func (p *Photo) SetDimensions(height, width int) {
+	p.height = height
+	p.width = width
 }
-
-/************************************** QUERY METHODS BELOW **************************************/

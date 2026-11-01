@@ -45,6 +45,7 @@ export async function login(prevState: unknown, formData: FormData): Promise<Log
       userId: data.user.id,
       userEmail: data.user.email,
     });
+    redirect("/dashboard");
   } else {
     return {
       error: await data.error
