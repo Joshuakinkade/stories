@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { loadSession } from "../lib/session";
 import { getUser } from "../lib/services/users";
+import PhotoBrowser from "@/components/photoBrowser/photoBrowser";
 import { Pagination } from "@heroui/react";
 
 const SampleBox = () => (<div className="pt-50 bg-gray-600"></div>);
@@ -14,8 +15,13 @@ export default async function DashboardPage() {
   const user = await getUser(session.authToken);
 
   return (user && (<div className="px-8">
-    <header className="my-8">
+    <header className="my-8 flex">
+      <div className="flex-1">
       <h1 className="text-4xl">{user.displayName}'s Stories</h1>
+      </div>
+      <div>
+        <PhotoBrowser /> 
+      </div>
     </header>
     <main>
       <div className="grid grid-cols-6 gap-12 my-12">
