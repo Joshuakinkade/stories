@@ -35,3 +35,17 @@ CREATE TABLE registration_codes (
     expires_at TIMESTAMP NOT NULL,
     CONSTRAINT fk_registration_codes_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE photos (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL,
+    alt_text TEXT NOT NULL DEFAULT '',
+    caption TEXT NOT NULL DEFAULT '',
+    height INTEGER NOT NULL,
+    width INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    CONSTRAINT fk_photos_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_photos_user_id ON photos(user_id);

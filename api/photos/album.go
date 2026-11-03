@@ -1,7 +1,7 @@
 package photos
 
 import (
-	"json"
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -49,7 +49,7 @@ func (a Album) MarshalJSON() ([]byte, error) {
 		"id": a.ID(),
 		"name": a.Name(),
 		"createdAt": a.CreatedAt(),
-		"updatedAt": a.UpdatedAt()k
+		"updatedAt": a.UpdatedAt(),
 	}
 
 	return json.Marshal(dataMap)

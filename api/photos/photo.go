@@ -8,6 +8,7 @@ import (
 
 type Photo struct {
 	id        uuid.UUID
+	userID    uuid.UUID
 	altText   string
 	caption   string
 	height    int
@@ -18,11 +19,12 @@ type Photo struct {
 	isNew bool
 }
 
-func NewPhoto() Photo {
+func NewPhoto(userID uuid.UUID) Photo {
 	id, _ := uuid.NewV7()
 	createdAt := time.Now()
 	p := Photo{
 		id:        id,
+		userID:    userID,
 		createdAt: createdAt,
 	}
 
@@ -30,7 +32,19 @@ func NewPhoto() Photo {
 }
 
 func (p Photo) ID() uuid.UUID {
-	return uuid.UUID{}
+	return p.id
+}
+
+func (p Photo) UserID() uuid.UUID {
+	return p.userID
+}
+
+func (p Photo) CreatedAt() time.Time {
+	return p.createdAt
+}
+
+func (p Photo) UpdatedAt() time.Time {
+	return p.updatedAt
 }
 
 func (p Photo) AltText() string {

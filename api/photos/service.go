@@ -7,10 +7,18 @@ import (
 )
 
 type PhotoService struct {
+	store Store
+	repository Repository
+}
+
+func NewPhotoService(store Store) PhotoService {
+	return {
+		store: store
+	}
 }
 
 func (ps PhotoService) UploadPhoto(ctx context.Context) error {
-	// p := NewPhoto()
+	p := NewPhoto()
 
 	// check photo dimensions
 	// load into Image
@@ -18,10 +26,18 @@ func (ps PhotoService) UploadPhoto(ctx context.Context) error {
 	// reorient based on exif data or something else
 	// resize if too big, maybe 2mb
 	// save to photo store with original format
+	err := ps.store.Save(ctx, []byte{}, p.ID())
+	if err != nil {
+		return errors.New("Could not save photo to store")
+	}
 
 	// extract some metadata: height, width, date taken, location, etc.
 	// save metadata to photo struct
 	// save photo
+	err := ps.repository.Create(ctx, p)
+	if err != nil {
+		return errors.New("Could not save photo to db")
+	}
 
 	return nil
 }

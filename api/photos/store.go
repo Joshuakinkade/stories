@@ -30,7 +30,7 @@ func NewStore(ctx context.Context) (Store, error) {
 		return Store{}, err
 	}
 
-	// Local S3 servers (MinIO) are addressed by hostname, so they need path-style URLs.
+	// Local S3 servers (RustFS) are addressed by hostname, so they need path-style URLs.
 	customEndpoint := os.Getenv("AWS_ENDPOINT_URL_S3") != ""
 
 	return Store{
