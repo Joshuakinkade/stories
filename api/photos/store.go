@@ -42,7 +42,7 @@ func NewStore(ctx context.Context) (Store, error) {
 }
 
 func key(photoID uuid.UUID) string {
-	return "photos/" + photoID.String()
+	return photoID.String()
 }
 
 func (s Store) Save(ctx context.Context, data []byte, photoID uuid.UUID) error {

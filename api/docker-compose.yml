@@ -19,11 +19,11 @@ services:
         condition: service_completed_successfully
 
   s3:
-    image: minio/minio
-    command: server /data --console-address ":9001"
+    image: rustfs/rustfs:latest
     environment:
-      MINIO_ROOT_USER: journal
-      MINIO_ROOT_PASSWORD: journal-secret
+      RUSTFS_ACCESS_KEY: journal
+      RUSTFS_SECRET_KEY: journal-secret
+      RUSTFS_CONSOLE_ENABLE: "true"
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -31,13 +31,17 @@ services:
       - s3_data:/data
 
   create-bucket:
-    image: minio/mc
+    image: amazon/aws-cli
     depends_on:
       - s3
+    environment:
+      AWS_ACCESS_KEY_ID: journal
+      AWS_SECRET_ACCESS_KEY: journal-secret
+      AWS_REGION: us-east-1
     entrypoint: >
       /bin/sh -c "
-      until mc alias set local http://s3:9000 journal journal-secret; do sleep 1; done &&
-      mc mb --ignore-existing local/photos
+      until aws --endpoint-url http://s3:9000 s3api head-bucket --bucket photos 2>/dev/null
+      || aws --endpoint-url http://s3:9000 s3api create-bucket --bucket photos; do sleep 1; done
       "
 
   db:

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"strconv"
@@ -9,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/joshuakinkade/web-journal/auth"
 	"github.com/joshuakinkade/web-journal/db"
+	"github.com/joshuakinkade/web-journal/photos"
 	"github.com/joshuakinkade/web-journal/users"
 	"github.com/joshuakinkade/web-journal/web"
 )
@@ -47,11 +49,22 @@ func main() {
 		log.Panic("Could not initialize database pool: ", err)
 	}
 
-	app := fiber.New()
+	photoStore, err := photos.NewStore(context.Background())
+	if err != nil {
+		log.Panic("Could not initialize photo store: ", err)
+	}
+	photoService := photos.NewService(photoStore)
+	photoHandler := web.NewPhotoHandlers(photoService)
+
+	app := fiber.New(fiber.Config{
+		BodyLimit: 6 * 1024 * 1024,
+	})
 
 	app.Get("/", func(c fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
+
+	app.Get("/photo/:photo_id", photoHandler.GetPhoto)
 
 	app.Post("/register", userHandler.Register)
 	app.Post("/login", userHandler.Login)
@@ -66,6 +79,8 @@ func main() {
 		ctx.Status(200)
 		return nil
 	})
+
+	app.Post("/photos", photoHandler.Upload)
 
 	app.Listen(":8080")
 }

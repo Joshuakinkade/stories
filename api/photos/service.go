@@ -1,59 +1,75 @@
 package photos
 
 import (
- 	"context"
+	"bytes"
+	"context"
+	"errors"
+	"io"
+	"log"
 
 	"github.com/google/uuid"
+	"github.com/disintegration/imaging"
 )
 
-type PhotoService struct {
-	store Store
+type Service struct {
+	store      Store
 	repository Repository
 }
 
-func NewPhotoService(store Store) PhotoService {
-	return {
-		store: store
+func NewService(store Store) Service {
+	return Service{
+		store: store,
 	}
 }
 
-func (ps PhotoService) UploadPhoto(ctx context.Context) error {
-	p := NewPhoto()
+func (ps Service) UploadPhoto(ctx context.Context, userID uuid.UUID, file io.Reader, fileName string) (Photo, error) {
+	
+	p := NewPhoto(userID)
 
-	// check photo dimensions
-	// load into Image
-
-	// reorient based on exif data or something else
-	// resize if too big, maybe 2mb
-	// save to photo store with original format
-	err := ps.store.Save(ctx, []byte{}, p.ID())
+	img, err := imaging.Decode(file, imaging.AutoOrientation(true))
 	if err != nil {
-		return errors.New("Could not save photo to store")
+		log.Println(err)
+		return Photo{}, errors.New("could not read image")
 	}
 
-	// extract some metadata: height, width, date taken, location, etc.
-	// save metadata to photo struct
-	// save photo
-	err := ps.repository.Create(ctx, p)
+	// get some metadata, save to photo struct 
+ 
+	// save to object storage
+  var b bytes.Buffer
+	err = imaging.Encode(&b, img, imaging.JPEG)
 	if err != nil {
-		return errors.New("Could not save photo to db")
+		return Photo{}, err
+	}
+	err = ps.store.Save(ctx, b.Bytes(), p.ID())
+	if err != nil {
+		return Photo{}, errors.New("Could not save photo to store")
 	}
 
-	return nil
+	err = ps.repository.Create(ctx, &p)
+	if err != nil {
+		return Photo{}, errors.New("Could not save photo to db")
+	}
+
+	return p, nil
 }
 
-func (ps PhotoService) ListPhotos(ctx context.Context, userID uuid.UUID) ([]Photo, error) {
+func (ps Service) ListPhotos(ctx context.Context, userID uuid.UUID) ([]Photo, error) {
 	return nil, nil
 }
 
-func (ps PhotoService) GetPhoto(ctx context.Context, photoID uuid.UUID) (Photo, error) {
-	return Photo{}, nil
+func (ps Service) GetPhoto(ctx context.Context, photoID uuid.UUID) ([]byte, error) {
+	p, err := ps.store.Get(ctx, photoID)
+	if err != nil {
+		return p, err
+	}
+
+	return p, nil
 }
 
-func (ps PhotoService) ListAlbums(ctx context.Context, userID uuid.UUID) ([]Album, error) {
+func (ps Service) ListAlbums(ctx context.Context, userID uuid.UUID) ([]Album, error) {
 	return nil, nil
 }
 
-func (ps PhotoService) CreateAlbum(ctx context.Context, userID uuid.UUID, name string) error {
+func (ps Service) CreateAlbum(ctx context.Context, userID uuid.UUID, name string) error {
 	return nil
 }
