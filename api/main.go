@@ -16,7 +16,10 @@ import (
 )
 
 func main() {
-	godotenv.Load(".env")
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Panic("Could not load environment configuration")
+	}
 
 	authKey := os.Getenv("AUTH_KEY")
 	if len(authKey) < 32 {
@@ -75,12 +78,12 @@ func main() {
 	app.Patch("/user", userHandler.UpdateUser)
 
 	app.Post("/settings", func(ctx fiber.Ctx) error {
-		ctx.WriteString("Hello, World!")
 		ctx.Status(200)
-		return nil
+		_, err := ctx.WriteString("Hello, World!")
+		return err
 	})
 
 	app.Post("/photos", photoHandler.Upload)
 
-	app.Listen(":8080")
+	log.Panic(app.Listen(":8080"))
 }

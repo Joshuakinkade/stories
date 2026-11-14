@@ -2,6 +2,7 @@ package users
 
 import (
 	"encoding/json"
+	"slices"
 	"strings"
 	"time"
 
@@ -36,9 +37,6 @@ type User struct {
 	roles       []UserRole
 	createdAt   time.Time
 	updatedAt   time.Time
-
-	rolesAdded   []uuid.UUID
-	rolesRemoved []uuid.UUID
 }
 
 func NewUser(email, displayName, password string) User {
@@ -52,7 +50,7 @@ func NewUser(email, displayName, password string) User {
 
 	u.SetEmail(email)
 	u.SetDisplayName(displayName)
-	u.SetPassword(password)
+	_ = u.SetPassword(password)
 
 	return u
 }
@@ -109,13 +107,7 @@ func (u *User) AddRole(newRole UserRole) {
 }
 
 func (u User) HasRole(role UserRole) bool {
-	for _, userRole := range u.roles {
-		if userRole == role {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(u.roles, role)
 }
 
 func (u User) CreatedAt() time.Time {

@@ -1,3 +1,4 @@
+// Package users manages application users.
 package users
 
 import (
@@ -125,8 +126,8 @@ func (s Service) GetByUserID(userID uuid.UUID) (User, error) {
 	return user, err
 }
 
-func (s Service) UpdateUser(userId uuid.UUID, update dtos.UserUpdate) error {
-	u, err := s.repo.FindByID(context.Background(), userId)
+func (s Service) UpdateUser(userID uuid.UUID, update dtos.UserUpdate) error {
+	u, err := s.repo.FindByID(context.Background(), userID)
 	if err != nil {
 		return err
 	}
@@ -139,10 +140,9 @@ func (s Service) UpdateUser(userId uuid.UUID, update dtos.UserUpdate) error {
 		u.SetDisplayName(*update.DisplayName)
 	}
 
-
 	if update.Password != nil && update.ConfirmPassword != nil {
 		if *update.Password == *update.ConfirmPassword {
-			u.SetPassword(*update.Password)
+			_ = u.SetPassword(*update.Password)
 		}
 	}
 

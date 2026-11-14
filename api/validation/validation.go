@@ -1,3 +1,4 @@
+// Package validation provides validation helpers.
 package validation
 
 import (
@@ -48,7 +49,7 @@ func ValidateString(value any, reqs StringRequirements) (string, error) {
 
 func ValidateEmail(value any) (string, error) {
 	reqs := StringRequirements{
-		match: regexp.MustCompile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"),
+		match: regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]+$`),
 	}
 	email, err := ValidateString(value, reqs)
 	if err != nil {

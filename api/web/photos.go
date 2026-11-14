@@ -19,7 +19,7 @@ func NewPhotoHandlers(p photos.Service) PhotoHandlers {
 }
 
 func (p PhotoHandlers) Upload(ctx fiber.Ctx) error {
-  userID, ok := ctx.Locals("userID").(uuid.UUID)
+	userID, ok := ctx.Locals("userID").(uuid.UUID)
 	if !ok {
 		return errors.New("bad userID")
 	}
@@ -36,15 +36,12 @@ func (p PhotoHandlers) Upload(ctx fiber.Ctx) error {
 
 	photo, err := p.photos.UploadPhoto(ctx, userID, file, fileHeader.Filename)
 	if err != nil {
-		ctx.JSON(map[string]string {
+		return ctx.JSON(map[string]string{
 			"error": err.Error(),
 		})
-		return nil
 	} else {
-		ctx.JSON(photo)
+		return ctx.JSON(photo)
 	}
-
-	return nil
 }
 
 func (p PhotoHandlers) GetPhoto(ctx fiber.Ctx) error {
@@ -56,13 +53,15 @@ func (p PhotoHandlers) GetPhoto(ctx fiber.Ctx) error {
 		})
 	}
 
-	photo, err := p.photos.GetPhoto(ctx, photoID)
+	// parse params into photos.OutputParams
+	var params photos.OutputParams
+
+	photo, err := p.photos.GetPhoto(ctx, photoID, params)
 	if err != nil {
 		ctx.Status(fiber.StatusBadRequest)
-		ctx.JSON(map[string]string {
+		return ctx.JSON(map[string]string{
 			"error": "could not get photo",
 		})
-		return nil
 	}
 
 	ctx.Type("jpeg")

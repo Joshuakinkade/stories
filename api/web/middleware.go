@@ -24,21 +24,21 @@ func (m Middleware) AuthMiddleware(c fiber.Ctx) error {
 	authHeader := c.Get("Authorization")
 	if authHeader == "" {
 		c.Status(fiber.StatusUnauthorized)
-		c.Write([]byte("Authorization header is required"))
-		return nil
+		_, err := c.Write([]byte("Authorization header is required"))
+		return err
 	}
 	if !strings.HasPrefix(authHeader, prefix) {
 		c.Status(fiber.StatusUnauthorized)
-		c.WriteString("Authorization header is not valid")
-		return nil
+		_, err := c.WriteString("Authorization header is not valid")
+		return err
 	}
 	token := strings.TrimPrefix(authHeader, prefix)
 
 	userIDstr, authErr := m.auth.CheckJWT(token)
 	if authErr != nil {
 		c.Status(fiber.StatusUnauthorized)
-		c.WriteString(authErr.Error())
-		return nil
+		_, err := c.WriteString(authErr.Error())
+		return err
 	}
 	userID, err := uuid.Parse(userIDstr)
 	if err != nil {

@@ -1,3 +1,4 @@
+// Package emails contains functionality for sending emails.
 package emails
 
 import "net/http"

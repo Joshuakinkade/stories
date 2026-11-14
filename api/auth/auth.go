@@ -1,3 +1,4 @@
+// Package auth handles authenticating users.
 package auth
 
 import (
@@ -58,13 +59,13 @@ func (as Manager) CheckJWT(tokenString string) (string, error) {
 	}
 
 	if !token.Valid {
-		return "", errors.New("Auth Error")
+		return "", errors.New("auth Error")
 	}
 
-	userId, err := token.Claims.GetSubject()
+	userID, err := token.Claims.GetSubject()
 	if err != nil {
-		return "", errors.New("Could not get userID")
+		return "", errors.New("could not get userID")
 	}
 
-	return userId, nil
+	return userID, nil
 }

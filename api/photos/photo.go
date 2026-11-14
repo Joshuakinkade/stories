@@ -15,8 +15,6 @@ type Photo struct {
 	width     int
 	createdAt time.Time
 	updatedAt time.Time
-
-	isNew bool
 }
 
 func NewPhoto(userID uuid.UUID) Photo {
