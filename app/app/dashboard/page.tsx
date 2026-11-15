@@ -2,9 +2,16 @@ import { redirect } from "next/navigation";
 import { loadSession } from "../lib/session";
 import { getUser } from "../lib/services/users";
 import PhotoBrowser from "@/components/photoBrowser/photoBrowser";
-import { Pagination } from "@heroui/react";
+import { Button, Pagination } from "@heroui/react";
+import { createStory } from "../lib/actions/stories";
 
 const SampleBox = () => (<div className="pt-50 bg-gray-600"></div>);
+
+function CreateStoryButton() {
+  return <form action={createStory}>
+    <Button type="submit">Write Story</Button>
+  </form>
+}
 
 export default async function DashboardPage() {
   const session = await loadSession();
@@ -19,8 +26,9 @@ export default async function DashboardPage() {
       <div className="flex-1">
       <h1 className="text-4xl">{user.displayName}'s Stories</h1>
       </div>
-      <div>
-        <PhotoBrowser /> 
+      <div className="flex items-center gap-2">
+        <CreateStoryButton/>
+        <PhotoBrowser />
       </div>
     </header>
     <main>
