@@ -1,8 +1,8 @@
-package users 
+package users
 
 import "testing"
 
-func Test_NewUser(t *testing.T) {
+func TestNewUser(t *testing.T) {
 	// u := NewUser("test@example.com", "Test User", "password")
 
 }
