@@ -1,20 +1,7 @@
 import NextLink from 'next/link';
-import { Button, Popover } from '@heroui/react';
-import LoginForm from './loginForm';
-import { loadSession } from '@/app/lib/session';
+import LoginPopup from './loginPopup';
+import { loadSession } from '@/lib/session';
 import SessionMenu from './SessionMenu';
-
-function LoginPopup() {
-  return (<Popover>
-    <Button variant="secondary">Login</Button>
-    <Popover.Content className="max-w-64">
-      <Popover.Dialog>
-        <LoginForm/>
-      </Popover.Dialog>
-    </Popover.Content>
-  </Popover>);
-}
-
 
 export default async function SiteHeader() {
   const session = await loadSession();

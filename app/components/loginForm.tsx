@@ -1,7 +1,7 @@
 "use client";
 
-import { login } from "@/app/lib/actions/auth";
-import { LoginState } from "@/app/lib/types";
+import { login } from "@/lib/actions/auth";
+import { LoginState } from "@/lib/types";
 import { Button, ErrorMessage, FieldError, FieldGroup, Fieldset, Form, Input, Label, TextField } from "@heroui/react";
 import { useActionState } from "react";
 

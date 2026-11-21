@@ -2,8 +2,8 @@
 
 import { useActionState } from "react";
 import { Button, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, TextField } from '@heroui/react';
-import { signup } from '../app/lib/actions/auth';
-import { SignupState } from "@/app/lib/types";
+import { signup } from '@/lib/actions/auth';
+import { SignupState } from "@/lib/types";
 
 
 export default function SignUpForm({ code }: { code: string }) {

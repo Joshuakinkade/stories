@@ -1,9 +1,9 @@
-import { Button } from "@heroui/react";
+import LoginForm from "@/components/loginForm";
 
 export default function Home() {
   return (
     <div className="p-4">
-      <Button>Hello</Button>
+      <LoginForm />
     </div>
   );
 }

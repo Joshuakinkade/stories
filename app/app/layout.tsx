@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { Providers } from "./providers";
-import SiteHeader from "@/components/siteHeader";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,10 +20,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-background text-foreground">
-          <div>
-            <SiteHeader/>
-            {children}
-          </div>
+        {children}
       </body>
     </html>
   );

@@ -1,8 +1,8 @@
 "use client";
 
-import { saveSettings } from "@/app/lib/actions/settings";
-import { User } from "@/app/lib/services/users";
-import { SaveSettingsState } from "@/app/lib/types";
+import { saveSettings } from "@/lib/actions/settings";
+import { User } from "@/lib/services/users";
+import { SaveSettingsState } from "@/lib/types";
 import { Button, Description, ErrorMessage, FieldError, Fieldset, Form, Input, Label, Modal, TextField } from "@heroui/react";
 import { useActionState, useState } from "react";
 

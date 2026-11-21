@@ -1,6 +1,7 @@
 "use client";
 import { Button, Popover } from "@heroui/react";
-import { Photo } from "@/app/lib/services/photos.tsx"
+import { useSystemDarkMode } from "@/lib/hooks/useSystemDarkMode";
+import { Photo } from "@/lib/services/photos.tsx"
 
 type BrowserGridProps = {
   photos: Photo[];
@@ -50,6 +51,9 @@ const fillerPhotos: Photo[] = [
 ];
 
 export default function PhotoBrowser() {
+  // The popover is portaled to <body>, outside the editor's dark-mode wrapper,
+  // so it needs the theme class applied directly.
+  const isDark = useSystemDarkMode();
 
   const handleFileDrop = (files) => {
     // upload files here. Actually, call the photo service to do it.
@@ -58,7 +62,7 @@ export default function PhotoBrowser() {
 
   return <Popover>
     <Button>Photos</Button>
-    <Popover.Content className="w-[48rem] max-w-[90vw]">
+    <Popover.Content className={`w-[48rem] max-w-[90vw]${isDark ? " dark" : ""}`}>
       <Popover.Dialog>
         <div className="flex items-center">
           <Popover.Heading className="text-xl font-semibold flex-1">Your Photos</Popover.Heading>
