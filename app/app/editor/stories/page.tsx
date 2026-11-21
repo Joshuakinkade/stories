@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
-import { loadSession } from "../lib/session";
-import { getUser } from "../lib/services/users";
+import { loadSession } from "@/lib/session";
+import { getUser } from "@/lib/services/users";
 import PhotoBrowser from "@/components/photoBrowser/photoBrowser";
 import { Button, Pagination } from "@heroui/react";
-import { createStory } from "../lib/actions/stories";
+import { createStory } from "@/lib/actions/stories";
 
 const SampleBox = () => (<div className="pt-50 bg-gray-600"></div>);
 

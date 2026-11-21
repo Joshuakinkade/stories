@@ -1,19 +1,20 @@
-import { Story } from "@/app/lib/services/stories";
-import { Desciption, FieldError, Fieldset, Form, Label, Input, Surface, TextField } from "@heroui/react";
+import { Story } from "@/lib/services/stories";
+import { Surface } from "@heroui/react";
 
 type StoryPageProps = {
-  params: Promise<{storyID: string}>
+  params: Promise<{ storyID: string }>
 }
 
-export default async function StoryPage({params}: StoryPageProps) {
+export default async function StoryPage({ params }: StoryPageProps) {
   const { storyID } = await params;
 
   const story: Story = {
     id: storyID,
     title: "Example Title",
     slug: "example-title",
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    elements: [],
   };
 
   return <div className="px-8 flex gap-4">
@@ -31,7 +32,7 @@ export default async function StoryPage({params}: StoryPageProps) {
         <p className="text-center">Metadata goes here: Author, Tags, etc.</p>
       </header>
       <main>
-        Canvas 
+        Canvas
       </main>
     </Surface>
   </div>

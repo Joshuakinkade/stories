@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import SettingsForm from "@/components/settingsForm";
-import { loadSession } from "../lib/session"
+import { loadSession } from "@/lib/session"
 import { Surface } from "@heroui/react";
-import { getUser } from "../lib/services/users";
+import { getUser } from "@/lib/services/users";
 
 
 export default async function SettingsPage() {
