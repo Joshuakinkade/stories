@@ -24,23 +24,23 @@ export default async function DashboardPage() {
   return (user && (<div className="px-8">
     <header className="my-8 flex">
       <div className="flex-1">
-      <h1 className="text-4xl">{user.displayName}'s Stories</h1>
+        <h1 className="text-4xl">{user.displayName}&apos;s Stories</h1>
       </div>
       <div className="flex items-center gap-2">
-        <CreateStoryButton/>
+        <CreateStoryButton />
         <PhotoBrowser />
       </div>
     </header>
     <main>
       <div className="grid grid-cols-6 gap-12 my-12">
-        <SampleBox/>
-        <SampleBox/>
-        <SampleBox/>
-        <SampleBox/>
-        <SampleBox/>
-        <SampleBox/>
-        <SampleBox/>
-        <SampleBox/>
+        <SampleBox />
+        <SampleBox />
+        <SampleBox />
+        <SampleBox />
+        <SampleBox />
+        <SampleBox />
+        <SampleBox />
+        <SampleBox />
       </div>
       <div>
         <Pagination className="justify-center">
@@ -48,14 +48,14 @@ export default async function DashboardPage() {
           <Pagination.Content>
             <Pagination.Item>
               <Pagination.Previous>
-                <Pagination.PreviousIcon/>
+                <Pagination.PreviousIcon />
                 <span>Previous</span>
               </Pagination.Previous>
             </Pagination.Item>
             <Pagination.Item>
               <Pagination.Next>
                 <span>Next</span>
-                <Pagination.NextIcon/>
+                <Pagination.NextIcon />
               </Pagination.Next>
             </Pagination.Item>
           </Pagination.Content>

@@ -8,13 +8,14 @@ import (
 )
 
 type Story struct {
-	id          uuid.UUID
-	title       string
-	slug        string
-	elements    []Element
-	publishedAt *time.Time
-	createdAt   time.Time
-	updatedAt   time.Time
+	id        uuid.UUID
+	title     string
+	slug      string
+	elements  []Element
+	createdAt time.Time
+	updatedAt time.Time
+
+	isNew bool
 }
 
 func NewStory(id uuid.UUID, title string) Story {
@@ -22,6 +23,7 @@ func NewStory(id uuid.UUID, title string) Story {
 		id:        id,
 		createdAt: time.Now(),
 		updatedAt: time.Now(),
+		isNew:     true,
 	}
 }
 
@@ -31,12 +33,13 @@ func FindByID(id uuid.UUID) (Story, error) {
 
 func Restore(id uuid.UUID, title, slug string, publishedAt *time.Time, createdAt, updatedAt time.Time) Story {
 	return Story{
-		id:          id,
-		title:       title,
-		slug:        slug,
-		publishedAt: publishedAt,
-		createdAt:   createdAt,
-		updatedAt:   updatedAt,
+		id:        id,
+		title:     title,
+		slug:      slug,
+		createdAt: createdAt,
+		updatedAt: updatedAt,
+
+		isNew: false,
 	}
 }
 
@@ -64,32 +67,4 @@ func (s Story) Slug() string {
 
 func (s *Story) AddElement(el Element) {
 	s.elements = append(s.elements, el)
-}
-
-func (s *Story) IsPublished() bool {
-	return s.publishedAt != nil
-}
-
-func (s Story) PublishedAt() time.Time {
-	return *s.publishedAt
-}
-
-func (s *Story) CreateVersion() error {
-	return nil
-}
-
-func (s *Story) Publish() error {
-	t := time.Now()
-	s.publishedAt = &t
-
-	// create a new version
-	//   copy config and elements to new version
-	// pin the published version
-	// do this in a transaction
-	return nil
-}
-
-func (s *Story) Save() error {
-	s.updatedAt = time.Now()
-	return nil
 }
